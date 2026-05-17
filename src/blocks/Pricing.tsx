@@ -1,5 +1,6 @@
 import { z } from 'zod'
 
+import { Heading } from '@/components/Heading'
 import { registerBlock } from './registerBlock'
 
 export const pricingSchema = z.object({
@@ -18,11 +19,11 @@ function Pricing(props: z.infer<typeof pricingSchema>) {
   return (
     <section className="pricing">
       {props.eyebrow ? <p>{props.eyebrow}</p> : null}
-      <h2>{props.title}</h2>
+      <Heading>{props.title}</Heading>
       <div className="pricing-grid">
         {props.plans.map((plan) => (
           <article className="pricing-plan" key={plan.name}>
-            <h3>{plan.name}</h3>
+            <Heading level={3}>{plan.name}</Heading>
             <div className="price">{plan.price}</div>
             <p>{plan.description}</p>
           </article>

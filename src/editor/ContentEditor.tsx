@@ -3,6 +3,9 @@
 import { useEffect, useMemo, useState } from 'react'
 
 import type { BlockDocument } from '@/blocks/types'
+import { Heading } from '@/components/Heading'
+import { Input } from '@/components/Input'
+import { Label } from '@/components/Label'
 import { BlockRenderer } from '@/renderer/BlockRenderer'
 import {
   blockOptions,
@@ -226,7 +229,7 @@ export function ContentEditor({ initialBlocks }: ContentEditorProps) {
     <main className="editor-shell">
       <aside className="editor-panel editor-structure">
         <div className="editor-panel-header">
-          <h1>Content Editor</h1>
+          <Heading level={1}>Content Editor</Heading>
           <button className="editor-secondary" onClick={resetEditor} type="button">
             Reset
           </button>
@@ -283,7 +286,7 @@ export function ContentEditor({ initialBlocks }: ContentEditorProps) {
         <div className="editor-panel-header">
           <div>
             <p>Selected block</p>
-            <h2>{selectedLabel}</h2>
+            <Heading>{selectedLabel}</Heading>
           </div>
         </div>
 
@@ -384,8 +387,7 @@ function BlockSettings({
           value={props.subtitle}
           onChange={(value) => updatePath(['subtitle'], value)}
         />
-        <label>
-          <span>Variant</span>
+        <Label text="Variant">
           <select
             value={String(props.variant || 'split')}
             onChange={(event) => updatePath(['variant'], event.target.value)}
@@ -393,7 +395,7 @@ function BlockSettings({
             <option value="split">Split</option>
             <option value="center">Center</option>
           </select>
-        </label>
+        </Label>
         <TextField
           label="CTA label"
           value={props.cta?.label}
@@ -506,14 +508,13 @@ function BlockSettings({
         value={props.description}
         onChange={(value) => updatePath(['description'], value)}
       />
-      <label>
-        <span>Workflow JSON</span>
+      <Label text="Workflow JSON">
         <textarea
           rows={14}
           value={workflowJson}
           onChange={(event) => setWorkflowJson(event.target.value)}
         />
-      </label>
+      </Label>
       {workflowError ? <p className="editor-error">{workflowError}</p> : null}
       <button className="editor-secondary" onClick={applyWorkflowJson} type="button">
         Apply workflow
@@ -560,13 +561,12 @@ function TextField({
   value: unknown
 }) {
   return (
-    <label>
-      <span>{label}</span>
-      <input
+    <Label text={label}>
+      <Input
         value={String(value || '')}
         onChange={(event) => onChange(event.target.value)}
       />
-    </label>
+    </Label>
   )
 }
 
@@ -580,14 +580,13 @@ function TextArea({
   value: unknown
 }) {
   return (
-    <label>
-      <span>{label}</span>
+    <Label text={label}>
       <textarea
         rows={4}
         value={String(value || '')}
         onChange={(event) => onChange(event.target.value)}
       />
-    </label>
+    </Label>
   )
 }
 
@@ -600,7 +599,7 @@ function EditorArrayHeader({
 }) {
   return (
     <div className="editor-array-header">
-      <h3>{label}</h3>
+      <Heading level={3}>{label}</Heading>
       <button className="editor-secondary" onClick={onAdd} type="button">
         Add
       </button>

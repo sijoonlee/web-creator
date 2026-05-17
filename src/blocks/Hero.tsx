@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import { Button } from '@/components/Button'
+import { Heading } from '@/components/Heading'
 import { registerBlock } from './registerBlock'
 
 export const heroSchema = z.object({
@@ -18,12 +20,12 @@ function Hero(props: z.infer<typeof heroSchema>) {
   return (
     <section className={`hero ${props.variant}`}>
       <div>
-        <h1>{props.title}</h1>
+        <Heading level={1}>{props.title}</Heading>
         {props.subtitle ? <p>{props.subtitle}</p> : null}
         {props.cta ? (
-          <a className="button" href={props.cta.href}>
+          <Button href={props.cta.href}>
             {props.cta.label}
-          </a>
+          </Button>
         ) : null}
       </div>
       {props.variant === 'split' ? <div className="hero-media" /> : null}

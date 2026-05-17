@@ -1,5 +1,6 @@
 import { z } from 'zod'
 
+import { Heading } from '@/components/Heading'
 import { registerBlock } from './registerBlock'
 
 export const faqSchema = z.object({
@@ -15,11 +16,11 @@ export const faqSchema = z.object({
 function Faq(props: z.infer<typeof faqSchema>) {
   return (
     <section className="faq">
-      <h2>{props.title}</h2>
+      <Heading>{props.title}</Heading>
       <div className="faq-list">
         {props.items.map((item) => (
           <article className="faq-item" key={item.question}>
-            <h3>{item.question}</h3>
+            <Heading level={3}>{item.question}</Heading>
             <p>{item.answer}</p>
           </article>
         ))}

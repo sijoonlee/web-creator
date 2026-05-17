@@ -3,6 +3,10 @@
 import { useMemo, useState } from 'react'
 import { z } from 'zod'
 
+import { Button } from '@/components/Button'
+import { Heading } from '@/components/Heading'
+import { Input } from '@/components/Input'
+import { Label } from '@/components/Label'
 import { createInitialWorkflowState, getCurrentStep } from '@/workflows/engine'
 import { workflowSchema } from '@/workflows/schemas'
 import { registerBlock } from './registerBlock'
@@ -29,13 +33,12 @@ function QuoteWizard(props: z.infer<typeof quoteWizardSchema>) {
   return (
     <section className="wizard">
       <div className="wizard-panel">
-        <h2>{props.title}</h2>
+        <Heading>{props.title}</Heading>
         {props.description ? <p>{props.description}</p> : null}
-        <h3>{currentStep.title}</h3>
+        <Heading level={3}>{currentStep.title}</Heading>
         {currentStep.fields.map((field) => (
-          <label className="wizard-field" key={field.name}>
-            <span>{field.label}</span>
-            <input
+          <Label className="wizard-field" key={field.name} text={field.label}>
+            <Input
               name={field.name}
               type={field.type}
               value={String(state.values[field.name] || '')}
@@ -49,11 +52,10 @@ function QuoteWizard(props: z.infer<typeof quoteWizardSchema>) {
                 }))
               }
             />
-          </label>
+          </Label>
         ))}
         <div className="wizard-actions">
-          <button
-            className="button"
+          <Button
             disabled={state.currentStepIndex === 0}
             onClick={() =>
               setState((previous) => ({
@@ -61,12 +63,10 @@ function QuoteWizard(props: z.infer<typeof quoteWizardSchema>) {
                 currentStepIndex: Math.max(0, previous.currentStepIndex - 1)
               }))
             }
-            type="button"
           >
             Back
-          </button>
-          <button
-            className="button"
+          </Button>
+          <Button
             onClick={() =>
               setState((previous) => ({
                 ...previous,
@@ -76,10 +76,9 @@ function QuoteWizard(props: z.infer<typeof quoteWizardSchema>) {
                 )
               }))
             }
-            type="button"
           >
             Next
-          </button>
+          </Button>
         </div>
       </div>
     </section>

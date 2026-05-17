@@ -22,6 +22,24 @@
   - edit basic props
   - live preview through the real renderer
   - localStorage persistence
+- Layout + Element + Page editor prototypes exist:
+  - `/editor/layouts` creates reusable layout skeletons.
+  - `/editor/elements` fills a mocked layout with basic elements.
+  - `/editor/pages` manages pages, copies layout snapshots, fills slots, and edits page-specific layout parameters.
+  - Current persistence is localStorage only.
+
+## Current Builder Direction
+
+The new builder model is:
+
+```txt
+Layout Editor creates reusable skeletons
+  -> Page Editor copies a layout snapshot into a page
+  -> Page Editor fills layout slots with elements
+  -> Page output renders layout + elements
+```
+
+The old block-based Content Editor should be treated as a working prototype/reference until Page Editor replaces its core use cases.
 
 ## What Payload Does Next
 
@@ -81,6 +99,15 @@ Editor changes blocks
    /preview/[slug] reads draft page data from Payload
    ```
 
+   For the new builder model, public/preview rendering should support Page Editor documents:
+
+   ```txt
+   page metadata
+   + layout snapshot
+   + slot element content
+   -> render React page
+   ```
+
 5. Improve the `pages` collection
 
    Current field:
@@ -97,12 +124,12 @@ Editor changes blocks
    - Add preview URL support.
    - Keep drafts enabled.
 
-6. Connect `/editor` to Payload
+6. Connect Page Editor to Payload
 
    Current:
 
    ```txt
-   /editor uses demo data and localStorage
+   /editor/pages uses localStorage
    ```
 
    Needed:
@@ -113,6 +140,8 @@ Editor changes blocks
    - Add Reset/Revert to latest saved draft.
    - Show save/publish errors.
    - Prevent anonymous edits unless intentionally allowed.
+
+   Keep `/editor` as the legacy block editor unless/until it is deprecated.
 
 7. Add server actions or API routes
 
@@ -154,10 +183,40 @@ Editor changes blocks
     - Draft preview mode.
     - Cache/revalidation strategy after publishing.
 
+11. Save pages as React components
+
+    Needed:
+
+    - Add an export/generation path for Page Editor pages.
+    - Convert a page document into a React component tree.
+    - Include the copied layout snapshot and slot elements in generated output.
+    - Map supported layout nodes to JSX:
+      - `section`
+      - `stack`
+      - `row`
+      - `grid`
+      - `slot`
+    - Map supported elements to JSX:
+      - Heading
+      - Text
+      - Input
+      - Button
+    - Decide output format:
+      - generated `.tsx` file
+      - downloadable/copyable component source
+      - Payload-stored generated source
+    - Keep generated components deterministic and stable:
+      - no `Date.now()`
+      - no `Math.random()`
+      - stable keys and ids
+    - Add tests or fixtures that compare page JSON input to generated React output.
+
 ## Later Improvements
 
 - Drag-and-drop block reordering.
 - Inline text editing inside the preview.
+- Import saved reusable elements into Page Editor.
+- Export Page Editor pages as React components.
 - Full workflow editor for Quote Wizard.
 - Rich text fields.
 - Role-based permissions.
@@ -166,4 +225,3 @@ Editor changes blocks
 - Preview iframe/device sizes.
 - Custom Payload admin field for block editing.
 - Generated TypeScript types from Payload documents.
-
